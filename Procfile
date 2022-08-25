@@ -1,1 +1,1 @@
-web: gunicorn thesite.wsgi
+web: gunicorn --chdir djangocode thesite.wsgi
