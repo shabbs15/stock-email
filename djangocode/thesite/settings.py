@@ -78,7 +78,7 @@ DATABASES = {
 }
 
 if "DATABASE_URL" in os.environ:
-    DATABASES = dj_database_url.config(conn_max_age=600)
+    DATABASES["default"] = dj_database_url.config(conn_max_age=600)
 else:
     DATABASES = {
         'default': {
