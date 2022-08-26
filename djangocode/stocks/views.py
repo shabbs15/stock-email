@@ -1,8 +1,13 @@
 import re
 from django.http import HttpResponse
 from django.template import loader
+from django.contrib.auth.hashers import make_password
+import time
+import secrets
 
 from .models import User
+from .models import EmailConfirmation
+
 
 def index(request):
     template = loader.get_template('stocks/index.html')
@@ -18,7 +23,11 @@ def wait(request):
             if User.objects.filter(email=email).exists():
                 return HttpResponse("Email already exists homenoy sorry")
             else:
-                User.objects.create(email=email, password=password)
+                theUser = User.objects.create(email=email, password=make_password(password), confirmed=False)
+
+                hashKey = secrets.token_hex(16)
+                EmailConfirmation.objects.create(email=theUser,emailHash=hashKey) 
+
                 return HttpResponse("pass")
     else:
         return HttpResponse("the fuck you trna do?")
