@@ -30,6 +30,7 @@ def wait(request):
 
                 hashKey = secrets.token_hex(16)
                 EmailConfirmation.objects.create(email=theUser,emailHash=hashKey) 
+                verificationLink = request.get_host() + "/" + str(hashKey)
                 
                 send_mail(
                     subject="Email Confirmation",
