@@ -1,4 +1,5 @@
 import re
+import os
 from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.hashers import make_password
@@ -9,6 +10,8 @@ from .models import User
 from .models import EmailConfirmation
 
 from django.core.mail import send_mail
+
+noReply = re.sub(".*@", "noreply@", os.environ["MAILGUN_SMTP_LOGIN"])
 
 
 
@@ -35,7 +38,8 @@ def wait(request):
                 send_mail(
                     subject="Email Confirmation",
                     message=verificationLink,
-                    recipientList=email,
+                    from_email=noReply,
+                    recipient_list=[email],
                  )
                     
                 return HttpResponse("pass")
