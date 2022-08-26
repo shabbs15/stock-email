@@ -8,6 +8,9 @@ import secrets
 from .models import User
 from .models import EmailConfirmation
 
+from django.core.mail import send_mail
+
+
 
 def index(request):
     template = loader.get_template('stocks/index.html')
@@ -27,7 +30,13 @@ def wait(request):
 
                 hashKey = secrets.token_hex(16)
                 EmailConfirmation.objects.create(email=theUser,emailHash=hashKey) 
-
+                
+                send_mail(
+                    subject="Email Confirmation",
+                    message=verificationLink,
+                    recipientList=email,
+                 )
+                    
                 return HttpResponse("pass")
     else:
         return HttpResponse("the fuck you trna do?")

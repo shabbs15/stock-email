@@ -23,6 +23,12 @@ ALLOWED_HOSTS = [
     'emailstocks.herokuapp.com',
 ]
 
+EMAIL_HOST = "smtp.mailgun.org"
+MAIL_PORT = 587
+EMAIL_HOST_USER = os.environ["MAILGUN_SMTP_LOGIN"]
+EMAIL_HOST_PASSWORD = os.environ["MAILGUN_SMTP_PASSWORD"]
+EMAIL_USE_TLS = True
+
 
 # Application definition
 
