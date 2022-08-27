@@ -28,6 +28,7 @@ MAIL_PORT = 587
 EMAIL_HOST_USER = os.environ["MAILGUN_SMTP_LOGIN"]
 EMAIL_HOST_PASSWORD = os.environ["MAILGUN_SMTP_PASSWORD"]
 EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 # Application definition
