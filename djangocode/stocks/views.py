@@ -17,14 +17,14 @@ import threading
 noReply = re.sub(".*@", "noreply@", os.environ["MAILGUN_SMTP_LOGIN"])
 
 def threadingSendMail(subject, message, from_email, recipientList):
-    print("attempt")
+    print("threading")
     send_mail(
         subject=subject,
         message=message,
         from_email=from_email,
         recipient_list=recipientList
     )
-    print("workeddd")
+    print("threaded")
 
 
 def index(request):
@@ -36,10 +36,10 @@ def wait(request):
         password = request.POST["password"]
         email = request.POST["email"]
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            return HttpResponse("shit not valid")
+            return HttpResponse("Email not valid")
         else:
             if User.objects.filter(email=email).exists():
-                return HttpResponse("Email already exists homenoy sorry")
+                return HttpResponse("Email already exists")
             else:
                 theUser = User.objects.create(email=email, password=make_password(password), confirmed=False)
 
@@ -52,4 +52,4 @@ def wait(request):
 
                 return HttpResponse("pass")
     else:
-        return HttpResponse("the fuck you trna do?")
+        return HttpResponse("hello")
