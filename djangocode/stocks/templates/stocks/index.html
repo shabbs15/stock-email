@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Enter the system</title>
+
+	{% load static %}
+
+	<link rel="stylesheet" href="{% static 'stocks/style.css' %}">
+
 </head>
 <body>
-	<form action="{% url 'wait' %}" method="post">
-		{% csrf_token %}
-		<input type="text" id="email" name="email">	<br><br>
-		<input type="password" id="password" name="password"><br><br>
-		<input type="submit" value="Submit">
-	</form>
-	<p>homeboy btw passwords aren't valid for a million letters and shit so you're entirely responsible #rightwingism''</p>
+	<div>
+		<h1>Entering the system </h1>
+		<form action="{% url 'wait' %}" method="post">
+			{% csrf_token %}
+			<label>Email</label><br><br>
+			<input spellcheck="false", type="text" id="email" name="email">	<br><br>
+			<label>Password</label><br><br>
+			<input type="password" id="password" name="password"><br><br>
+			<input type="submit" value="Proceed">
+		</form>
+	</div>
 </body>
 </html>

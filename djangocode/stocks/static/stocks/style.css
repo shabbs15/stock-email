@@ -1,0 +1,17 @@
+div {
+	background-color: lightGray;
+	width: 35vw;
+	padding: 30px;
+}
+
+input {
+	border: 2px solid black;
+}
+
+input:focus {
+	outline: none;
+}
+
+body {
+	font-family: sans-serif;
+}
