@@ -11,8 +11,17 @@ from .models import EmailConfirmation
 
 from django.core.mail import send_mail
 
+from threading import Thread
+
 noReply = re.sub(".*@", "noreply@", os.environ["MAILGUN_SMTP_LOGIN"])
 
+def threadingSendMail(subject, message, from_email, recipiantList):
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=from_email,
+        recipientList=recipientList
+    )
 
 
 def index(request):
@@ -38,12 +47,15 @@ def wait(request):
                 verificationLink = request.get_host() + "/" + str(hashKey)
                 
                 print("asdfasdf")
-                send_mail(
-                    subject="Email Confirmation",
-                    message=verificationLink,
-                    from_email=noReply,
-                    recipient_list=[email],
-                 )
+
+
+                Thread(target=threadingSendMail, args=[
+                    "Email Confirmation",
+                    verificationLink,
+                    noReply,
+                    [email]
+                    ]
+                )
                     
                 print("done")
                 return HttpResponse("pass")
