@@ -14,18 +14,24 @@ from django.core.mail import send_mail
 from threading import Thread
 import threading
 
+import requests
+
 noReply = re.sub(".*@", "noreply@", os.environ["MAILGUN_SMTP_LOGIN"])
+myDomainName = os.environ["MAILGUN_DOMAIN"]
+myApiKey = os.environ["MAILGUN_API_KEY"]
 
-def threadingSendMail(subject, message, from_email, recipientList):
-    print("threading")
-    send_mail(
-        subject=subject,
-        message=message,
-        from_email=from_email,
-        recipient_list=recipientList
-    )
-    print("threaded")
+def sendMessageApi(email, subject, message):
+    print("hello")
+    files = [
+        ('from', (None, f'Excited User <mailgun@{myDomainName}>')),
+        ('to', (None, email)),
+        ('subject', (None, subject)),
+        ('text', (None, message)),
+    ]
 
+    response = requests.post(f'https://api.mailgun.net/v3/{myDomainName}/messages', files=files, auth=('api', myApiKey))
+    print("done ")
+        
 
 def index(request):
     template = loader.get_template('stocks/index.html')
@@ -47,8 +53,7 @@ def wait(request):
                 EmailConfirmation.objects.create(email=theUser,emailHash=hashKey) 
                 verificationLink = request.get_host() + "/" + str(hashKey)
                 
-                threading.Thread(target=threadingSendMail, args=("Email conf",
-                    verificationLink,noReply,[email],)).start()
+                threading.Thread(target=sendMessageApi, args=(email, "yo", verificationLink)).start()
 
                 return HttpResponse("pass")
     else:
