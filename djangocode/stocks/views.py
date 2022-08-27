@@ -29,12 +29,15 @@ def wait(request):
             if User.objects.filter(email=email).exists():
                 return HttpResponse("Email already exists homenoy sorry")
             else:
+                print("asdfasdfwerqewrqe")
                 theUser = User.objects.create(email=email, password=make_password(password), confirmed=False)
+                print("createasdf")
 
                 hashKey = secrets.token_hex(16)
                 EmailConfirmation.objects.create(email=theUser,emailHash=hashKey) 
                 verificationLink = request.get_host() + "/" + str(hashKey)
                 
+                print("asdfasdf")
                 send_mail(
                     subject="Email Confirmation",
                     message=verificationLink,
@@ -42,6 +45,7 @@ def wait(request):
                     recipient_list=[email],
                  )
                     
+                print("done")
                 return HttpResponse("pass")
     else:
         return HttpResponse("the fuck you trna do?")
