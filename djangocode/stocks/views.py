@@ -12,15 +12,16 @@ from .models import EmailConfirmation
 from django.core.mail import send_mail
 
 from threading import Thread
+import threading
 
 noReply = re.sub(".*@", "noreply@", os.environ["MAILGUN_SMTP_LOGIN"])
 
-def threadingSendMail(subject, message, from_email, recipiantList):
+def threadingSendMail(subject, message, from_email, recipientList):
     send_mail(
         subject=subject,
         message=message,
         from_email=from_email,
-        recipientList=recipientList
+        recipient_list=recipientList
     )
 
 
@@ -46,18 +47,9 @@ def wait(request):
                 EmailConfirmation.objects.create(email=theUser,emailHash=hashKey) 
                 verificationLink = request.get_host() + "/" + str(hashKey)
                 
-                print("asdfasdf")
+                threading.Thread(target=threadingSendMail, args=("Email conf",
+                    verificationLink,noReply,[email],)).start()
 
-
-                Thread(target=threadingSendMail, args=[
-                    "Email Confirmation",
-                    verificationLink,
-                    noReply,
-                    [email]
-                    ]
-                )
-                    
-                print("done")
                 return HttpResponse("pass")
     else:
         return HttpResponse("the fuck you trna do?")
