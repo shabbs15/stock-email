@@ -9,14 +9,10 @@ import secrets
 from .models import User
 from .models import EmailConfirmation
 
-from django.core.mail import send_mail
-
-from threading import Thread
 import threading
 
 import requests
 
-noReply = re.sub(".*@", "noreply@", os.environ["MAILGUN_SMTP_LOGIN"])
 myDomainName = os.environ["MAILGUN_DOMAIN"]
 myApiKey = os.environ["MAILGUN_API_KEY"]
 
