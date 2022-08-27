@@ -17,12 +17,14 @@ import threading
 noReply = re.sub(".*@", "noreply@", os.environ["MAILGUN_SMTP_LOGIN"])
 
 def threadingSendMail(subject, message, from_email, recipientList):
+    print("attempt")
     send_mail(
         subject=subject,
         message=message,
         from_email=from_email,
         recipient_list=recipientList
     )
+    print("workeddd")
 
 
 def index(request):
@@ -39,9 +41,7 @@ def wait(request):
             if User.objects.filter(email=email).exists():
                 return HttpResponse("Email already exists homenoy sorry")
             else:
-                print("asdfasdfwerqewrqe")
                 theUser = User.objects.create(email=email, password=make_password(password), confirmed=False)
-                print("createasdf")
 
                 hashKey = secrets.token_hex(16)
                 EmailConfirmation.objects.create(email=theUser,emailHash=hashKey) 
