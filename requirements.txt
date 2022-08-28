@@ -3,3 +3,4 @@ django
 psycopg2
 dj-database-url
 requests
+whitenoise
