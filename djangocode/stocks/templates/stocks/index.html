@@ -1,25 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Enter the system</title>
+{% extends "stocks/baseCss.html" %}
 
-	{% load static %}
+{% block title %}Enter the system{% endblock %}
 
-	<link rel="stylesheet" href="{% static 'stocks/style.css' %}">
+{% block content %}
+<h1>Entering the system </h1>
+<h3>Login and/or register </h3>
 
-</head>
-<body>
-	<div>
-		<h1>Entering the system </h1>
-		<form action="{% url 'wait' %}" method="post">
-			{% csrf_token %}
-			<label>Email</label><br><br>
-			<input spellcheck="false", type="text" id="email" name="email">	<br><br>
-			<label>Password</label><br><br>
-			<input type="password" id="password" name="password"><br><br>
-			<input type="submit" value="Proceed">
-		</form>
-	</div>
-</body>
-</html>
+<form action="{% url 'wait' %}" method="post">
+	{% csrf_token %}
+	<label>Email</label><br><br>
+	<input spellcheck="false", type="text" id="email" name="email">	<br><br>
+	<label>Password</label><br><br>
+	<input type="password" id="password" name="password"><br><br>
+	<input type="submit" value="Proceed">
+</form>
+
+{% endblock %}

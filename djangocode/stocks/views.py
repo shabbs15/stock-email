@@ -1,7 +1,7 @@
 import re
 import os
 from django.http import HttpResponse
-from django.template import loader
+from django.template.loader import render_to_string as rts
 from django.contrib.auth.hashers import make_password
 import time
 import secrets
@@ -30,18 +30,17 @@ def sendMessageApi(email, subject, message):
         
 
 def index(request):
-    template = loader.get_template('stocks/index.html')
-    return HttpResponse(template.render(request=request))
+    return HttpResponse(rts("stocks/index.html", request=request))
 
 def wait(request):
     if request.method == "POST":
         password = request.POST["password"]
         email = request.POST["email"]
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            return HttpResponse("Email not valid")
+            return HttpResponse(rts("stocks/emailInvalid.html", request=request))
         else:
             if User.objects.filter(email=email).exists():
-                return HttpResponse("Email already exists")
+                return HttpResponse(rts("stocks/emailTaken.html", request=request))
             else:
                 theUser = User.objects.create(email=email, password=make_password(password), confirmed=False)
 
@@ -51,6 +50,6 @@ def wait(request):
                 
                 threading.Thread(target=sendMessageApi, args=(email, "yo", verificationLink)).start()
 
-                return HttpResponse("pass")
+                return HttpResponse(rts("stocks/emailLink.html", request=request))
     else:
         return HttpResponse("hello")

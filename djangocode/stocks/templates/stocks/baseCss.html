@@ -1,0 +1,20 @@
+{% extends "stocks/base.html" %}
+
+{% block head %}
+
+<title>{% block title %} {% endblock %} </title>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'stocks/style.css' %}">
+
+{% endblock %}
+
+{% block body %}
+
+<div>
+
+	{% block content %} {% endblock %}
+
+</div>
+
+{% endblock %}
