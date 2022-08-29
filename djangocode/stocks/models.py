@@ -5,6 +5,12 @@ class User(models.Model):
     password = models.CharField(max_length=200)
     confirmed = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.email + "\n " + self.password + "\n " + str(self.confirmed)
+
 class EmailConfirmation(models.Model):
-    email = models.ForeignKey(User, to_field="email", on_delete=models.CASCADE)
+    email = models.ForeignKey(User, on_delete=models.CASCADE)
     emailHash = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.emailHash 

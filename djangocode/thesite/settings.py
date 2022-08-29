@@ -30,6 +30,8 @@ EMAIL_HOST_PASSWORD = os.environ["MAILGUN_SMTP_PASSWORD"]
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE=True
+
 
 # Application definition
 
