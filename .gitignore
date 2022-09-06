@@ -1,5 +1,7 @@
 *.swp #vim
 
+celerybeat-schedule
+
 __pycache__/
 *.py[cod]
 *$py.class
