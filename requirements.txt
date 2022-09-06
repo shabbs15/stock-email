@@ -6,3 +6,4 @@ requests
 whitenoise
 celery
 redis
+finnhub-python
