@@ -13,7 +13,7 @@ class EmailConfirmations(models.Model):
     emailHash = models.CharField(max_length=200)
     
     def __str__(self):
-        return self.emailHash 
+        return self.emailHash + email
 
 class Stocks(models.Model):
     ticker = models.CharField(max_length=8, unique=True)
