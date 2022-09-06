@@ -155,7 +155,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #celery
 #CELERY_TIMEZONE = 'UTC'
 
-if os.getenv("DEBUG", True):
+if os.getenv("DEBUG", False):
     CELERY_BROKER_URL = 'redis://localhost:6379'
 else:
     CELERY_BROKER_URL = os.environ["REDIS_URL"]
