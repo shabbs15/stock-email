@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', False) == False #false locally
+DEBUG = os.getenv('DEBUG', False) == False #whole thing returns false
 DEBUG = True
 
 ALLOWED_HOSTS = [
@@ -155,7 +155,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #celery
 #CELERY_TIMEZONE = 'UTC'
 
-if os.getenv("REDIS_URL", True):
+if os.getenv("DEBUG", True):
     CELERY_BROKER_URL = 'redis://localhost:6379'
 else:
     CELERY_BROKER_URL = os.environ["REDIS_URL"]
