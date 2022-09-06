@@ -1,4 +1,4 @@
-div {
+.greyContainer {
 	background-color: lightGray;
 	width: 35vw;
 	padding: 30px;
@@ -14,4 +14,8 @@ input:focus {
 
 body {
 	font-family: sans-serif;
+}
+
+ul {
+	list-style-type: none;
 }

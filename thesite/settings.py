@@ -1,4 +1,5 @@
 import os
+import django
 import dj_database_url
 from pathlib import Path
 
@@ -14,10 +15,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', False) == False
+DEBUG = os.getenv('DEBUG', False) == False #false locally
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
+    '0.0.0.0',
     'https://emailstocks.herokuapp.com/',
     'emailstocks.herokuapp.com/',
     'emailstocks.herokuapp.com',
@@ -36,7 +39,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 # Application definition
 
 INSTALLED_APPS = [
-    'stocks.apps.StocksConfig',
+#    'stocks.apps.StocksConfig',
+    'stocks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -147,3 +151,11 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#celery
+#CELERY_TIMEZONE = 'UTC'
+
+if os.getenv("REDIS_URL", True):
+    CELERY_BROKER_URL = 'redis://localhost:6379'
+else:
+    CELERY_BROKER_URL = os.environ["REDIS_URL"]

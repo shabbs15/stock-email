@@ -1,0 +1,45 @@
+{% extends "stocks/baseCss.html" %}
+{% load static %}
+
+{% block title %}App {% endblock %}
+
+
+{% block stylesheets %}
+	{{ block.super }}
+	<link rel="stylesheet" href="{% static 'stocks/app.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% if notification %}
+	<div class="notificationBox">
+		{% if notification == 'invalidTicker' %}
+			<p>Invalid ticker</p>	
+		{% endif %}
+	</div>
+{% endif %}
+
+
+<h1> This the app </h1>
+
+<form action="{% url 'app' %}" method="post">
+	{% csrf_token %}
+	<input spellcheck="false", type="text", name="tickerInput" autocomplete="off">	<br><br>
+	<input type="submit" hidden />
+
+	{% for ticker in tickers %}
+		<div class="ticker">
+			<div class="tickerName"> {{ ticker }} </div>
+			<button type="submit" name = "tickerRemove" value = {{ ticker }} class="remove">Remove </button>
+		</div>
+
+	{% empty %}
+
+	<div class="ticker">Enter stocks that will appear here</div>
+	
+	{% endfor %}
+
+</form>
+
+
+{% endblock %}

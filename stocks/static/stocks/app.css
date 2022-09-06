@@ -1,0 +1,27 @@
+.ticker {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	height: 30px;
+	border-top: 2px solid;
+	padding: 0px 10px 0px 10px;
+}
+
+.remove {
+	height: 20px;
+	border: 0px;
+}
+
+.remove:focus {
+	background-color: lightSteelBlue;
+	outline: 0px;
+}
+
+.tickerName {
+}
+
+.notificationBox {
+	background-color: red;
+	border: 1px solid;
+}

@@ -1,1 +1,2 @@
-web: gunicorn --chdir djangocode thesite.wsgi
+web: gunicorn thesite.wsgi
+worker: celery --app thesite worker -B
