@@ -14,7 +14,7 @@ app.conf.beat_schedule = {
         "sendit": {
             "task": "stocks.tasks.massStockQuery",
 #            "schedule": 10.0
-            "schedule": crontab(hour=23, minute=03, day_of_week='mon,tue,wed,thu,fri')
+            "schedule": crontab(hour=23, minute=5, day_of_week='mon,tue,wed,thu,fri')
             }
 }
 
