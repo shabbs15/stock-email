@@ -22,11 +22,11 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '0.0.0.0',
     'https://emailstocks.herokuapp.com/',
-    'http://www.stockpricedelta.xyz/'
-    'www.stockpricedelta.xyz/'
-    'www.stockpricedelta.xyz'
-    'stockpricedelta.xyz/'
-    'stockpricedelta.xyz'
+    'http://www.stockpricedelta.xyz/',
+    'www.stockpricedelta.xyz/',
+    'www.stockpricedelta.xyz',
+    'stockpricedelta.xyz/',
+    'stockpricedelta.xyz',
     'emailstocks.herokuapp.com/',
     'emailstocks.herokuapp.com',
 ]
