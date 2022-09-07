@@ -19,8 +19,6 @@ DEBUG = os.getenv('DEBUG', False) == False #whole thing returns false
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'stockpricedelta.xyz',
-    'www.stockpricedelta.xyz',
     '127.0.0.1',
     '0.0.0.0',
     'https://emailstocks.herokuapp.com/',
@@ -33,13 +31,15 @@ ALLOWED_HOSTS = [
 #EMAIL_HOST_USER = os.environ["MAILGUN_SMTP_LOGIN"]
 #EMAIL_HOST_PASSWORD = os.environ["MAILGUN_SMTP_PASSWORD"]
 #EMAIL_USE_TLS = True
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = "1059170ea6714c6882b7@cloudmailin.net"
-EMAIL_HOST_USER = "app273242703@heroku.com"
-EMAIL_HOST_PASSWORD = "ivzP7sqSXgtjWqSErH8UYEzj"
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = os.environ["SENDGRID_API_KEY"]
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 
