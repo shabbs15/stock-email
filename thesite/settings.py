@@ -23,8 +23,9 @@ ALLOWED_HOSTS = [
     '0.0.0.0',
     'https://emailstocks.herokuapp.com/',
     'http://www.stockpricedelta.xyz/'
-    'www.stockpricedelta.xyz/enter/'
-    'stockpricedelta.xyz/enter/'
+    'www.stockpricedelta.xyz/'
+    'stockpricedelta.xyz/'
+    'stockpricedelta.xyz'
     'emailstocks.herokuapp.com/',
     'emailstocks.herokuapp.com',
 ]
