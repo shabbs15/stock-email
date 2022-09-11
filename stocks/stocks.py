@@ -37,6 +37,10 @@ class stockDataManager():
                 self.timestamp = round(yesterday.timestamp())
 
             else:
+                #self.period = "day"
+                #yesterday = self.today - datetime.timedelta(days=1)
+                #self.timestamp = round(yesterday.timestamp())
+
                 self.period = None
 
     def updateDatabase(self,ticker):

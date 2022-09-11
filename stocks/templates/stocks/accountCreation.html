@@ -1,0 +1,44 @@
+{% extends "stocks/baseCss.html" %}
+
+{% block title %}Delta{% endblock %}
+
+{% block content %}
+
+
+{% if notification %}
+	<div>
+		<p class="alert alert-danger p-3 mb-4 " role="alert">{{ notification }}</p>	
+	</div>
+{% endif %}
+
+
+{% if path == 'register' %}
+<h1>Register</h1>
+{% elif path == 'login' %}
+<h1>Log in</h1>
+{% endif %}
+
+<br><br>
+
+<form action="{% url path %}" method="post" class='form-group'>
+	{% csrf_token %}
+
+	<label>Email</label><br><br>
+	<input spellcheck="false", type="text" id="email" name="email" placeholder="Enter Email" class="form-control">	<br><br>
+
+	<label>Password</label><br><br>
+	<input type="password" id="password" name="password" placeholder="Enter Password" class="form-control"><br><br>
+
+	<div class="d-flex flex-row justify-content-around">
+		<input type="submit" value="Proceed" class="btn btn-dark">
+
+		{% if path == 'register' %}
+			<a href="/login/" class="btn btn-link">Log in</a>
+		{% elif path == 'login' %}
+			<a href="/register/" class="btn btn-link">Register</a>
+		{% endif %}
+	</div>
+</form>
+
+
+{% endblock %}

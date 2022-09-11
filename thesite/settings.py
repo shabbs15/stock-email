@@ -31,12 +31,6 @@ ALLOWED_HOSTS = [
     'emailstocks.herokuapp.com',
 ]
 
-#EMAIL_HOST = "smtp.mailgun.org"
-#MAIL_PORT = 465
-#EMAIL_HOST_USER = os.environ["MAILGUN_SMTP_LOGIN"]
-#EMAIL_HOST_PASSWORD = os.environ["MAILGUN_SMTP_PASSWORD"]
-#EMAIL_USE_TLS = True
-
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
 EMAIL_HOST_PASSWORD = os.environ["SENDGRID_API_KEY"]

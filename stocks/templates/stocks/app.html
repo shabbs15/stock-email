@@ -1,8 +1,7 @@
 {% extends "stocks/baseCss.html" %}
 {% load static %}
 
-{% block title %}App {% endblock %}
-
+{% block title %}Delta{% endblock %}
 
 {% block stylesheets %}
 	{{ block.super }}
@@ -12,34 +11,50 @@
 {% block content %}
 
 {% if notification %}
-	<div class="notificationBox">
+	<div>
 		{% if notification == 'invalidTicker' %}
-			<p>Invalid ticker</p>	
+			<p class="alert alert-danger p-3 mb-4 " role="alert">Invalid ticker</p>	
+		{% elif notification == 'verified' %}
+			<p class="alert alert-success p-3 mb-4 " role="alert">Email verified</p>	
+		{% elif notification == 'loggedin' %}
+			<p class="alert alert-success p-3 mb-4 " role="alert">Logged in</p>	
 		{% endif %}
 	</div>
 {% endif %}
 
+<h4 class="fw-bold">Add or Remove Stocks</h4>
 
-<h1> This the app </h1>
+<br>
 
-<form action="{% url 'app' %}" method="post">
+<form action="{% url 'app' %}" method="post" class="form-group">
 	{% csrf_token %}
-	<input spellcheck="false", type="text", name="tickerInput" autocomplete="off">	<br><br>
+	
+	<input spellcheck="false", type="text", name="tickerInput" autocomplete="off"placeholder="Enter Ticker" class="form-control ">
+
+	<br>
 	<input type="submit" hidden />
 
-	{% for ticker in tickers %}
-		<div class="ticker">
-			<div class="tickerName"> {{ ticker }} </div>
-			<button type="submit" name = "tickerRemove" value = {{ ticker }} class="remove">Remove </button>
-		</div>
+	<div class="column">
+		{% for ticker in tickers %}
+			<div class="row my-1">
+				<div class="col-8 fw-bold"> {{ ticker }} </div>
+				<button type="submit" name = "tickerRemove" value = {{ ticker }} class="col btn btn-sm btn-dark">Remove</button>
+			</div>
+		{% empty %}
 
-	{% empty %}
+		<div class="fw-bold">Enter stocks that will appear here</div>
+		
+		{% endfor %}
+	</div>
 
-	<div class="ticker">Enter stocks that will appear here</div>
-	
-	{% endfor %}
 
 </form>
+<br><br>
+
+
+<div class="d-flex justify-content-start">
+	<a href=/logout/ class="btn btn-sm btn-dark">Log out</a>
+</div>
 
 
 {% endblock %}

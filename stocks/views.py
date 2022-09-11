@@ -17,35 +17,57 @@ import threading
 tickers = []
 
 def index(request):
-    return HttpResponse(rts("stocks/index.html", request=request))
+    if "loggedin" in request.session:
+        return redirect("/app/")
+    else:
+        return redirect("/register/")
 
-def wait(request):
+def registerLogin(request):
+    path = request.path.replace("/", "")
+    notification = None
+
     if request.method == "POST":
         password = request.POST["password"]
         email = request.POST["email"]
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            return HttpResponse(rts("stocks/emailInvalid.html", request=request))
-        else:
+        
+        if path == "register":
+            if not Users.objects.filter(email=email).exists():
+                if re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                    user = Users.objects.create(email=email, password=make_password(password), confirmed=False)
+
+                    hashKey = secrets.token_hex(16)
+                    eamilConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
+                    verificationLink = request.get_host() + "/authorisation/" + str(hashKey)
+                    emailMessage = f"<html>To verify your account click the verification <a href='{verificationLink}'>link</a><br> {verificationLink}'</html>"
+                    print(emailMessage)
+                    
+                    threading.Thread(target=sendEmail, args=(email, "Stock Delta: Email Confirmation", emailMessage)).start()
+
+                    #email being created
+                    return HttpResponse(rts("stocks/emailLink.html", request=request))
+                else:
+                    #email regix fail register
+                    notification = "Invalid email given"
+            else:
+                #email exists register
+                notification = "Email taken"
+
+        elif path == "login":
             if Users.objects.filter(email=email).exists():
-                user = Users.objects.get(email=email)
+                user = Users.objects.get(email = email)
+
                 if check_password(password, user.password):
                     request.session["loggedin"] = True
                     request.session["email"] = email
-                    return HttpResponse(rts("stocks/in.html", request=request))
-                else:
-                    return HttpResponse(rts("stocks/emailTaken.html", request=request))
-            else:
-                theUser = Users.objects.create(email=email, password=make_password(password), confirmed=False)
+                    return redirect("/app/?loggedin=True")
 
-                hashKey = secrets.token_hex(16)
-                eamilConf = EmailConfirmations.objects.create(email=theUser,emailHash=hashKey) 
-                verificationLink = request.get_host() + "/authorisation/" + str(hashKey)
-                
-                threading.Thread(target=sendEmail, args=(email, "yo", verificationLink)).start()
+            notification = "Invalid email or password"
 
-                return HttpResponse(rts("stocks/emailLink.html", request=request))
-    else:
-        return HttpResponse("hello")
+    if request.GET.get("oldEmailLink", "False") == "True":
+        notification = "Expired email link"
+
+    return HttpResponse(rts("stocks/accountCreation.html", request=request, context={"notification": notification, "path": path}))
+        
 
 def authorisation(request, authid):
     if EmailConfirmations.objects.filter(emailHash=authid):
@@ -54,19 +76,27 @@ def authorisation(request, authid):
             user.email.confirmed = True
             user.email.save()
             user.delete()
-            return HttpResponse(rts("stocks/authorised.html", request=request))
 
+            request.session["email"] = user.email.email
+            request.session["loggedin"] = True
+            return redirect("/app/?verified=True")
     else:
-        return HttpResponse(rts("stocks/emailOldLink.html", request=request))
+        return redirect("/register/?oldEmailLink=True")
 
 def app(request):
+    
     if "loggedin" in request.session:
+        notification = None;
+
+        if request.GET.get("verified", "False") == "True":
+            notification = "verified"
+        elif request.GET.get("loggedin", "False") == "True":
+            notification = "loggedin"
+
         sessionEmail = request.session["email"]
 
         sessionUser = Users.objects.get(email=sessionEmail)
         tickers = sessionUser.stocks_set.all()
-
-        notification = None;
 
         if request.method == "POST":
             post = request.POST
@@ -103,6 +133,8 @@ def app(request):
         for ticker in sessionUser.stocks_set.all():
             finalTickers.append(ticker.ticker) 
 
+        finalTickers.sort()
+
         return HttpResponse(rts("stocks/app.html", request=request, context={"tickers": finalTickers, "notification": notification}))
     else:
-        return redirect("/enter/")
+        return redirect("/login/")
