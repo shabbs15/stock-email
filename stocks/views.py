@@ -12,7 +12,7 @@ from .stocks import checkStock
 from .email import sendEmail
 
 import threading
-
+import json
 
 tickers = []
 
@@ -39,7 +39,6 @@ def registerLogin(request):
                     eamilConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
                     verificationLink = request.get_host() + "/authorisation/" + str(hashKey)
                     emailMessage = f"<html>To verify your account click the verification <a href='{verificationLink}'>link</a><br> {verificationLink}'</html>"
-                    print(emailMessage)
                     
                     threading.Thread(target=sendEmail, args=(email, "Stock Delta: Email Confirmation", emailMessage)).start()
 
@@ -84,7 +83,6 @@ def authorisation(request, authid):
         return redirect("/register/?oldEmailLink=True")
 
 def app(request):
-    
     if "loggedin" in request.session:
         notification = None;
 
@@ -138,3 +136,14 @@ def app(request):
         return HttpResponse(rts("stocks/app.html", request=request, context={"tickers": finalTickers, "notification": notification}))
     else:
         return redirect("/login/")
+
+def pageNotFound(request, exception):
+    return HttpResponse(rts("stocks/404.html", request=request))
+
+def logout(request):
+    if "email" in request.session:   
+        del request.session["email"]
+    if "loggedin" in request.session:
+        del request.session["loggedin"]
+
+    return redirect("/login/")
