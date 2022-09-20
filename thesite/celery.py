@@ -13,8 +13,8 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
         "sendit": {
             "task": "stocks.tasks.massStockQuery",
-#           "schedule": 10.0
-            "schedule": crontab(hour=21, minute=0, day_of_week='mon,tue,wed,thu,fri')
+          "schedule": 20.0
+#          "schedule": crontab(hour=21, minute=0, day_of_week='mon,tue,wed,thu,fri')
             }
 }
 
