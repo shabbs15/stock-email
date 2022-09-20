@@ -174,7 +174,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #celery
-#CELERY_TIMEZONE = 'UTC'
+CELERY_TIMEZONE = 'UTC'
 
 if os.getenv("DEBUG", False):
     CELERY_BROKER_URL = 'redis://localhost:6379'
