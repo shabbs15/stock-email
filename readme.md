@@ -6,4 +6,4 @@ Daily price change of stocks emailed at Monday-Friday at UTC 21:00
 
 Users can add or remove stocks by typing in the ticker
 
-**Technologies: Python Django Bootstrap Postgresql **
+**Technologies: Python Django Bootstrap Postgresql**
