@@ -14,7 +14,7 @@ def checkStock(ticker):
 
 class stockDataManager():
     def __init__(self):
-        
+        #determine period        
         self.today = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=datetime.timezone.utc)
         self.endTimestamp = round(self.today.timestamp())
 
@@ -44,6 +44,7 @@ class stockDataManager():
                 self.period = None
 
     def updateDatabase(self,ticker):
+        #return percentage
         candles = fc.stock_candles(ticker, "D", self.endTimestamp - (60*60*24*40), self.endTimestamp) #gets data 40 days back
         timestampList = candles["t"]
         closeList = candles["c"]

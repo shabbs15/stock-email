@@ -3,29 +3,32 @@ from .models import Stocks, Users
 from .email import sendEmail
 
 from celery import shared_task
+from mongo import dbManager
 
 
 @shared_task(bind=True)
 def massStockQuery(bro):
-    stockList = Stocks.objects.all().distinct()
-    
     sdm = stockDataManager()
     period = sdm.period
+
+    dbm = dbManager(period)
 
     print(period)
 
     if period:
-        for stock in stockList:
-            if stock.users.all(): # checks people actually want to have this stock and it's not just sitting in the database
-                percentage = sdm.updateDatabase(stock.ticker)
-                
-                setattr(stock, "percentage", percentage)
+        for stock in dbm.stocks.find():
+            ticker = stock.ticker
+            if not dbm.deleteTickerNotInUse(ticker):
+                #ticker exists
+                percentage = sdm.updateDatabase(ticker)
 
-                stock.save()
-        
-        userList = Users.objects.all().distinct()
-        for user in userList:
-            stocks = user.stocks_set.all()
+                dbm.updateTicker(ticker, percentage)
+
+
+        for user in dbm.users.find():
+            email = user.email 
+
+            stocks = dbm.getUserStocks(email=email)
 
             if len(stocks) > 0:
                 htmlString = f"""<html>
@@ -42,8 +45,8 @@ def massStockQuery(bro):
 
                 alternate = True
                 for stock in stocks:
-                    ticker = stock.ticker
-                    percentage = str(stock.percentage)
+                    ticker = stock[0]
+                    percentage = str(stock[1])
                     alternate = not alternate
                     if alternate:
                         htmlString += "<tr style='background-color:azure; text-align: center;'>"
