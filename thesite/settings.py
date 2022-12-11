@@ -1,5 +1,6 @@
 import os
 import django
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,12 +46,12 @@ ALLOWED_HOSTS = [
     'emailstocks.herokuapp.com',
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = os.environ["SENDGRID_API_KEY"]
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'AKIAWNW7NNQXGC5YLP3E' # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = 'BH0GwASXf4K07IH+68OidkIDbfBLBUDArlyukzBJ3FOa'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE=True
@@ -100,6 +101,31 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'thesite.wsgi.application'
+
+
+# Database
+# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+
+DATABASES = {
+    "default":{
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "database",
+    }
+}
+
+if "DATABASE_URL" in os.environ:
+    DATABASES["default"] = dj_database_url.config(conn_max_age=600)
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': "database",
+            "USER": "mydatabaseuser",
+            "PASSWORD": "p",
+            "HOST": "localhost",
+            "PORT": "",
+        }
+    }
 
 
 # Password validation
