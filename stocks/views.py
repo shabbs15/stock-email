@@ -7,9 +7,11 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login
 import secrets
 
-from .models import *
 from .stocks import checkStock
 from .email import sendEmail
+from .mongo import dbManager
+
+dbm = dbManager(None)
 
 import threading
 import json
@@ -31,16 +33,19 @@ def registerLogin(request):
         email = request.POST["email"]
         
         if path == "register":
-            if not Users.objects.filter(email=email).exists():
-                if re.match(r"[^@]+@[^@]+\.[^@]+", email):
-                    user = Users.objects.create(email=email, password=make_password(password), confirmed=False)
-
+            if re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                if not dbm.emailExists(email):
                     hashKey = secrets.token_hex(16)
+<<<<<<< HEAD
 <<<<<<< HEAD
                     emailConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
 =======
                     eamilConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
 >>>>>>> parent of c300606 (trying db in pymongo (doesn't work))
+=======
+                    dbm.register(email, password, hashKey)
+
+>>>>>>> parent of 91ad9b3 (Revert "trying db in pymongo (doesn't work)")
                     verificationLink = request.get_host() + "/authorisation/" + str(hashKey)
                     emailMessage = f"<html>To verify your account click the verification <a href='{verificationLink}'>link</a><br> {verificationLink}'</html>"
                     
@@ -51,16 +56,14 @@ def registerLogin(request):
                     return HttpResponse(rts("stocks/emailLink.html", request=request))
                 else:
                     #email regix fail register
-                    notification = "Invalid email given"
+                    notification = "Email taken"
             else:
                 #email exists register
-                notification = "Email taken"
+                notification = "Invalid email given"
 
         elif path == "login":
-            if Users.objects.filter(email=email).exists():
-                user = Users.objects.get(email = email)
-
-                if check_password(password, user.password):
+            if dbm.emailExists(email):
+                if dbm.checkPassword(email, password):
                     request.session["loggedin"] = True
                     request.session["email"] = email
                     return redirect("/app/?loggedin=True")
@@ -74,16 +77,12 @@ def registerLogin(request):
         
 
 def authorisation(request, authid):
-    if EmailConfirmations.objects.filter(emailHash=authid):
-        user = EmailConfirmations.objects.get(emailHash=authid)
-        if user.email.confirmed == False:
-            user.email.confirmed = True
-            user.email.save()
-            user.delete()
-
-            request.session["email"] = user.email.email
-            request.session["loggedin"] = True
-            return redirect("/app/?verified=True")
+    email = dbm.confirmEmail(authid)
+    print(email)
+    if email:
+        request.session["email"] = email
+        request.session["loggedin"] = True
+        return redirect("/app/?verified=True")
     else:
         return redirect("/register/?oldEmailLink=True")
 
@@ -98,45 +97,39 @@ def app(request):
 
         sessionEmail = request.session["email"]
 
-        sessionUser = Users.objects.get(email=sessionEmail)
-        tickers = sessionUser.stocks_set.all()
+        tickers = dbm.getUserStocks(sessionEmail)
+
+        #tickers = dbm.getUserStocks(email)
 
         if request.method == "POST":
             post = request.POST
                 
             if "tickerRemove" in post:
                 ticker = post["tickerRemove"].upper()
-                if tickers.filter(ticker=ticker):
-                    tickerObject = tickers.get(ticker=ticker)
-                    tickerObject.users.remove(sessionUser) 
+                if dbm.removeTickerFromUser(email, ticker):
+                    tickers.remove(ticker)
 
             elif "tickerInput" in post:
                 ticker = post["tickerInput"].upper()
 
                 if 9 > len(ticker) > 0 and ticker.isalpha():
-                    if not tickers.filter(ticker=ticker): 
+                    if not ticker in tickers: #checks ticker not already there
                         if not Stocks.objects.filter(ticker=ticker): #checks if ticker doesn't exist in database
-                            if checkStock(ticker):
-                                t1 = Stocks(ticker=ticker)
-                                t1.save()
-                                t1.users.add(sessionUser)
+                            if checkStock(ticker): #checks if valid
+                                tickers.append(ticker)
+                                dbm.addStock(email, ticker)
                             else:
                                 notification = "invalidTicker"
 
                         else: #exists in model
-                            t1 = Stocks.objects.get(ticker=ticker)
-                            t1.users.add(sessionUser)
+                            tickers.append(ticker)
+                            dbm.addStock(email, ticker)
 
                 else:
                     notification = "invalidTicker"
 
 
-        finalTickers = []
-
-        for ticker in sessionUser.stocks_set.all():
-            finalTickers.append(ticker.ticker) 
-
-        finalTickers.sort()
+        tickers.sort()
 
         return HttpResponse(rts("stocks/app.html", request=request, context={"tickers": finalTickers, "notification": notification}))
     else:
