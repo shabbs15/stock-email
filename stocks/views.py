@@ -36,7 +36,11 @@ def registerLogin(request):
                     user = Users.objects.create(email=email, password=make_password(password), confirmed=False)
 
                     hashKey = secrets.token_hex(16)
+<<<<<<< HEAD
                     emailConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
+=======
+                    eamilConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
+>>>>>>> parent of c300606 (trying db in pymongo (doesn't work))
                     verificationLink = request.get_host() + "/authorisation/" + str(hashKey)
                     emailMessage = f"<html>To verify your account click the verification <a href='{verificationLink}'>link</a><br> {verificationLink}'</html>"
                     
