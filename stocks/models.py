@@ -3,7 +3,7 @@ from django.db import models
 class Users(models.Model):
     email = models.CharField(max_length=200, unique=True)
     password = models.CharField(max_length=200)
-    confirmed = models.BooleanField(default=False)
+    confirmed = models.BooleanField(default=None)
 
     def __str__(self):
         return self.email + "\n " + self.password + "\n " + str(self.confirmed)

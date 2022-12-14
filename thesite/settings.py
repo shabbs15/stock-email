@@ -108,11 +108,12 @@ WSGI_APPLICATION = 'thesite.wsgi.application'
 
 DATABASES = {
     "default":{
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "database",
+        "ENGINE": "djongo",
+        "NAME": "stocks",
     }
 }
 
+"""
 if "DATABASE_URL" in os.environ:
     DATABASES["default"] = dj_database_url.config(conn_max_age=600)
 else:
@@ -126,6 +127,7 @@ else:
             "PORT": "",
         }
     }
+"""
 
 
 # Password validation

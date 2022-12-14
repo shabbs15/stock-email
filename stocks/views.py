@@ -36,10 +36,11 @@ def registerLogin(request):
                     user = Users.objects.create(email=email, password=make_password(password), confirmed=False)
 
                     hashKey = secrets.token_hex(16)
-                    eamilConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
+                    emailConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
                     verificationLink = request.get_host() + "/authorisation/" + str(hashKey)
                     emailMessage = f"<html>To verify your account click the verification <a href='{verificationLink}'>link</a><br> {verificationLink}'</html>"
                     
+                    print("shits sending")
                     threading.Thread(target=sendEmail, args=(email, "Stock Delta: Email Confirmation", emailMessage)).start()
 
                     #email being created
