@@ -53,9 +53,12 @@ def registerLogin(request):
                 notification = "Email taken"
 
         elif path == "login":
-            if Users.objects.filter(email=email).exists():
+            try:
                 user = Users.objects.get(email = email)
+            except Users.DoesNotExist:
+                user = None
 
+            if user:
                 if check_password(password, user.password):
                     request.session["loggedin"] = True
                     request.session["email"] = email
