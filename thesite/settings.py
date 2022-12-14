@@ -109,6 +109,7 @@ WSGI_APPLICATION = 'thesite.wsgi.application'
 DATABASES = {
     "default":{
 <<<<<<< HEAD
+<<<<<<< HEAD
         "ENGINE": "djongo",
         "NAME": "stocks",
     }
@@ -122,6 +123,13 @@ DATABASES = {
 }
 
 >>>>>>> parent of c300606 (trying db in pymongo (doesn't work))
+=======
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "database",
+    }
+}
+
+>>>>>>> parent of 6d966e1 (Half way there with djongo migration)
 if "DATABASE_URL" in os.environ:
     DATABASES["default"] = dj_database_url.config(conn_max_age=600)
 else:
@@ -136,9 +144,12 @@ else:
         }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 =======
 >>>>>>> parent of c300606 (trying db in pymongo (doesn't work))
+=======
+>>>>>>> parent of 6d966e1 (Half way there with djongo migration)
 
 
 =======

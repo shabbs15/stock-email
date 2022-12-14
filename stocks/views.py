@@ -38,6 +38,7 @@ def registerLogin(request):
                     hashKey = secrets.token_hex(16)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     emailConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
 =======
                     eamilConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
@@ -46,10 +47,12 @@ def registerLogin(request):
                     dbm.register(email, password, hashKey)
 
 >>>>>>> parent of 91ad9b3 (Revert "trying db in pymongo (doesn't work)")
+=======
+                    eamilConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
+>>>>>>> parent of 6d966e1 (Half way there with djongo migration)
                     verificationLink = request.get_host() + "/authorisation/" + str(hashKey)
                     emailMessage = f"<html>To verify your account click the verification <a href='{verificationLink}'>link</a><br> {verificationLink}'</html>"
                     
-                    print("shits sending")
                     threading.Thread(target=sendEmail, args=(email, "Stock Delta: Email Confirmation", emailMessage)).start()
 
                     #email being created
