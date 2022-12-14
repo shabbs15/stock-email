@@ -52,7 +52,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'AKIAWNW7NNQXGC5YLP3E' # this is exactly the value 'apikey'
 EMAIL_HOST_PASSWORD = 'BH0GwASXf4K07IH+68OidkIDbfBLBUDArlyukzBJ3FOa'
 
-
 SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 
 
@@ -102,60 +101,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'thesite.wsgi.application'
 
 
-<<<<<<< HEAD
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 DATABASES = {
     "default":{
-<<<<<<< HEAD
-<<<<<<< HEAD
         "ENGINE": "djongo",
         "NAME": "stocks",
     }
 }
-
-"""
-=======
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "database",
-    }
-}
-
->>>>>>> parent of c300606 (trying db in pymongo (doesn't work))
-=======
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "database",
-    }
-}
-
->>>>>>> parent of 6d966e1 (Half way there with djongo migration)
-if "DATABASE_URL" in os.environ:
-    DATABASES["default"] = dj_database_url.config(conn_max_age=600)
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': "database",
-            "USER": "mydatabaseuser",
-            "PASSWORD": "p",
-            "HOST": "localhost",
-            "PORT": "",
-        }
-    }
-<<<<<<< HEAD
-<<<<<<< HEAD
-"""
-=======
->>>>>>> parent of c300606 (trying db in pymongo (doesn't work))
-=======
->>>>>>> parent of 6d966e1 (Half way there with djongo migration)
-
-
-=======
->>>>>>> parent of 91ad9b3 (Revert "trying db in pymongo (doesn't work)")
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {

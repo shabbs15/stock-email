@@ -36,8 +36,20 @@ def registerLogin(request):
             if re.match(r"[^@]+@[^@]+\.[^@]+", email):
                 if not dbm.emailExists(email):
                     hashKey = secrets.token_hex(16)
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
                     emailConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
+=======
+                    eamilConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
+>>>>>>> parent of c300606 (trying db in pymongo (doesn't work))
+=======
+                    dbm.register(email, password, hashKey)
 
+>>>>>>> parent of 91ad9b3 (Revert "trying db in pymongo (doesn't work)")
+=======
+                    eamilConf = EmailConfirmations.objects.create(email=user,emailHash=hashKey) 
+>>>>>>> parent of 6d966e1 (Half way there with djongo migration)
                     verificationLink = request.get_host() + "/authorisation/" + str(hashKey)
                     emailMessage = f"<html>To verify your account click the verification <a href='{verificationLink}'>link</a><br> {verificationLink}'</html>"
                     
@@ -53,13 +65,8 @@ def registerLogin(request):
                 notification = "Invalid email given"
 
         elif path == "login":
-            try:
-                user = Users.objects.get(email = email)
-            except Users.DoesNotExist:
-                user = None
-
-            if user:
-                if check_password(password, user.password):
+            if dbm.emailExists(email):
+                if dbm.checkPassword(email, password):
                     request.session["loggedin"] = True
                     request.session["email"] = email
                     return redirect("/app/?loggedin=True")
